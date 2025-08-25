@@ -2,18 +2,28 @@ const express = require("express");
 const connectDB = require("./config/database")
 const app = express();
 const User = require("./models/user")
+const{validateSignUpData} = require("./utils/validation")
+const bcrypt = require("bcrypt");
 
 app.use(express.json()); //now this middleware is activated for all the routes to convert the json data into js obj
 
 app.post("/signup", async (req, res) =>{
-  // console.log(req.body); //becz we are requesting data from body section
-  //Creating a new instance of the User Model
-  const user = new User(req.body); //creating a new user which i have got from the request
   try {
+    //Validation of data
+    validateSignUpData(req);
+    const { firstName, lastName, emailId, password } = req.body;
+    //Encryption of password
+    const passswordHash = await bcrypt.hash(password, 10);
+    console.log(passswordHash)
+
+    const user = new User({
+      firstName, lastName, emailId, password: passswordHash,
+    });
+
     await user.save(); //data saved to DB
     res.send("User added successfully!");
   } catch (error) {
-    res.status(400).send("Erro saving the user:" + err.message);
+    res.status(400).send("ERROR:" + error.message);
   }
 });
 
