@@ -14,6 +14,32 @@ else if(!validator.isStrongPassword(password)){
 }
 };
 
+const validateEditProfileData = (req) => {
+  const allowedEditFields = [
+    "firstName",
+    "lastName",
+    "emailId",
+    "photoUrl",
+    "gender",
+    "age",
+    "about",
+    "skills",
+  ]; 
+
+
+  //checking if there is every field coming to edit by user must present in allowedEditFields...obj.keys gives u firstname and all
+  const isEditAllowed = Object.keys(req.body).every((field) =>
+    allowedEditFields.includes(field)
+  );
+
+  return isEditAllowed;
+}
+
+
+
+
 module.exports = {
     validateSignUpData,
+    validateEditProfileData,
 }
+

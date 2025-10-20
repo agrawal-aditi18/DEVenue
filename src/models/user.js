@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require("validator");
-
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -26,7 +27,6 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      unique: true,
       validate(value) {
         if (!validator.isStrongPassword(value)) {
           throw new Error("Enter a Strong Password: " + value);
@@ -38,11 +38,15 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      validate(value) {
-        if (!["male", "female", "others"].includes(value)) {
-          throw new Error("Gender data is invalid");
-        }
+      enum :{
+        values: ["male", "female", "other"],
+        message: `{VALUE} is not a valid gender type`,
       },
+      // validate(value) {
+      //   if (!["male", "female", "others"].includes(value)) {
+      //     throw new Error("Gender data is invalid");
+      //   }
+      // },
     },
     photoUrl: {
       type: String,
@@ -65,6 +69,30 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+
+userSchema.methods.getJWT = async function () {
+  const user = this;
+  const token = jwt.sign(
+    { _id: user._id },
+    "DEV@Venue777",
+    {
+      expiresIn: "7d",
+    }
+  );
+  return token;
+};
+
+userSchema.methods.validatePassword = async function (passwordInputByUser){
+  const user = this;
+  const passswordHash = user.password;
+  const isPasswordValid = await bcrypt.compare(
+    passwordInputByUser,
+    passswordHash
+  );
+
+  return isPasswordValid; 
+}
 
 //this model create its own instances
 module.exports = mongoose.model("User", userSchema);
