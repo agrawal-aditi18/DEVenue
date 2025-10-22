@@ -8,11 +8,12 @@
 ## profileRouter
 - GET /profile/view
 - PATCH /profile/edit
-- PATCH /profile/password // Forgot password API
+- PATCH /profile/password  // Forgot password API ------> Have to create
 
 ## connectionRequestRouter
 - POST /request/send/:status/:userId 
-- POST /request/review/:status/:requestId
+- POST /request/review/accepted/:requestId
+- POST /request/review/rejected/:requestId
 
 ## userRouter
 - GET /user/requests/received
