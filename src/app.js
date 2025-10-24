@@ -2,7 +2,17 @@ const express = require("express");
 const connectDB = require("./config/database")
 const app = express();
 const cookieParser = require("cookie-parser")
+const cors = require("cors");
 
+
+app.use(
+  cors({
+    //whitelisting the origin..
+    //from where my frontend is hosted-
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json()); //now this middleware is activated for all the routes to convert the json data into js obj
 app.use(cookieParser()); //middleware to parse cookie and get accessable
 
