@@ -10,9 +10,14 @@ app.use(
     //whitelisting the origin..
     //from where my frontend is hosted-
     origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
+
+
+
 app.use(express.json()); //now this middleware is activated for all the routes to convert the json data into js obj
 app.use(cookieParser()); //middleware to parse cookie and get accessable
 
