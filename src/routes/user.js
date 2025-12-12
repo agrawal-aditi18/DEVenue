@@ -68,7 +68,7 @@ userRouter.get("/feed", userAuth, async (req, res) =>{
       hideUsersFromFeed.add(req.fromUserId.toString());
       hideUsersFromFeed.add(req.toUserId.toString());
     })
-    console.log(hideUsersFromFeed);
+    // console.log(hideUsersFromFeed);
 
     const users = await User.find({
       //function to convert a set into an array, nin - not present in array and id is ne- not equal to loggedin user id
